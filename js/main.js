@@ -23,6 +23,13 @@ $( document ).ready(function() {
     //      (NOTE: You do not have to perform any validation on the data as
     //          a base requirement.)
 
+	$('#login-form .btn').click(function(){
+		$('#login-form').hide();
+		$('.user-fullname').text(userInfo.firstName+" "+userInfo.lastName);
+		$('div.user-info').show();
+	});
+	
+  
 
     // TODO: Create a function to listen for clicks on all the "View Details"
     // buttons so that when a user clicks a "View Details" button they see
@@ -33,6 +40,22 @@ $( document ).ready(function() {
     //      3. Toggle visibility of all the elements within that parent with the class `details`.
     //      4. Change the text of the "view details" button to read "hide details" so the user
     //          understands they can hide the text again.
+	
+	$('.view-details').click(function(){
+		var container = $(this).parent().parent();
+		var detailsEl = container.find('.details');
+		detailsEl.toggle(); // toggle visibility
+		if($(this).text() === 'Learn more »' || $(this).text() === 'View details »') {
+			$(this).text('Hide details');	
+		}else{
+			if($(this).hasClass('btn-lg')){
+				//primary button
+				$(this).text('Learn more »');
+			}else{
+				$(this).text('View details »');
+			}
+		}
+	});
 
     // TODO: Create a function that listens for clicks on the voting buttons and
     // looks at the `data-vote` attribute on each button to see what was voted for,
@@ -43,5 +66,25 @@ $( document ).ready(function() {
     //      3. Increment the counter for whichever vote talley is affected.
     //      4. Determine the respective percentages (out of 100) for each progress bar.
     //      5. Modify the `width` attribute on each progress bar to set the updated percentage.
+
+	
+	$('.vote').click(function(){
+		if($(this).attr('data-vote') === 'great'){
+			if(voteCounts.great < 100){
+				voteCounts.great++;
+				var greatWidth = 10 + 0.9 * voteCounts.great;
+				$('.great-progress').css('width',greatWidth+'%');
+			}
+
+		}else if($(this).attr('data-vote') === 'greatest'){
+			if(voteCounts.greatest < 100){
+				voteCounts.greatest++;
+				var greatestWidth = 30 + 0.7 * voteCounts.greatest;
+				$('.greatest-progress').css('width',greatestWidth+'%');
+			}
+		}
+		
+		voteCounts.total = voteCounts.great + voteCounts.greatest;
+	});
 
 });
